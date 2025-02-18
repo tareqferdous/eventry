@@ -1,6 +1,8 @@
+import { registerUser } from "@/app/actions";
+
 const RegistrationForm = () => {
   return (
-    <form className="login-form">
+    <form className="login-form" action={registerUser}>
       <div>
         <label htmlFor="name">Full Name</label>
         <input type="text" name="name" id="name" />

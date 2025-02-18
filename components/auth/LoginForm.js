@@ -1,8 +1,34 @@
+"use client";
+
+import { performLogin } from "@/app/actions";
+import { useAuth } from "@/app/hooks/useAuth";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
 const LoginForm = () => {
+  const [error, setError] = useState("");
+  const { setAuth } = useAuth();
+  const router = useRouter();
+
+  const onSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const formData = new FormData(event.currentTarget);
+      const loggedInUser = await performLogin(formData);
+      if (loggedInUser) {
+        setAuth(loggedInUser);
+        router.push("/");
+      } else {
+        setError("Please provide a valid login credentials");
+      }
+    } catch (error) {
+      setError(error.message);
+    }
+  };
   return (
     <>
-      <div className="my-2 text-red-500"></div>
-      <form className="login-form">
+      <div className="my-2 text-red-500">{error}</div>
+      <form className="login-form" onSubmit={onSubmit}>
         <div>
           <label htmlFor="email">Email Address</label>
           <input type="email" name="email" id="email" />
